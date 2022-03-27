@@ -53,7 +53,7 @@
         padding: 4px 4px;
         border-radius: 4px;
       }
-      #error {
+      #error, #lower {
         color: red;
         font-size: 13px;
         margin: 0;
@@ -289,12 +289,12 @@
           </select>
           <form>
             <label for="input">Enter amount in USD</label> <br />
+            <p id="lower"></p>
             <input
               type="number"
               id="input"
               placeholder="$"
               onfocusin="checkCoin()"
-              required
             />
             <br />
             <button class="button" type="button" onclick="donate()">
@@ -308,10 +308,14 @@
 
     <script type="text/javascript">
       async function donate() {
+        let input = document.getElementById("input").value;
+        if(input < 10) {
+          document.getElementById('lower').innerHTML = 'Please enter amount greater than $9'
+          return false
+        }
         document.getElementById("loader").style.display = "block";
         let coinType = document.getElementById("coin");
         if (coin.value === "btc") {
-          let input = document.getElementById("input").value;
           let qr = document.getElementById("qr");
           const data = await fetch(
             "https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD"
@@ -332,7 +336,6 @@
               document.getElementById("payment").style.display = "block";
             });
         } else if (coin.value === "eth") {
-          let input = document.getElementById("input").value;
           let qr = document.getElementById("qr");
           const data = await fetch(
             "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD"
@@ -353,7 +356,6 @@
               document.getElementById("payment").style.display = "block";
             });
         } else if (coin.value === "sol") {
-          let input = document.getElementById("input").value;
           let qr = document.getElementById("qr");
           const data = await fetch(
             "https://min-api.cryptocompare.com/data/price?fsym=SOL&tsyms=USD"
@@ -374,7 +376,6 @@
               document.getElementById("payment").style.display = "block";
             });
         } else if (coin.value === "bnb") {
-          let input = document.getElementById("input").value;
           let qr = document.getElementById("qr");
           const data = await fetch(
             "https://min-api.cryptocompare.com/data/price?fsym=BNB&tsyms=USD"
@@ -395,7 +396,6 @@
               document.getElementById("payment").style.display = "block";
             });
         } else if (coin.value === "trc") {
-          let input = document.getElementById("input").value;
           let qr = document.getElementById("qr");
           const data = await fetch(
             "https://min-api.cryptocompare.com/data/price?fsym=USDT&tsyms=USD"
@@ -418,7 +418,6 @@
               document.getElementById("payment").style.display = "block";
             });
         } else if (coin.value === "erc") {
-          let input = document.getElementById("input").value;
           let qr = document.getElementById("qr");
           const data = await fetch(
             "https://min-api.cryptocompare.com/data/price?fsym=USDT&tsyms=USD"
@@ -443,6 +442,7 @@
         }
       }
       function checkCoin() {
+        document.getElementById('lower').innerHTML = ''
         let coin = document.getElementById("coin");
         let er = document.getElementById("error");
         if (coin.value === "0") {
